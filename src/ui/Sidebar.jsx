@@ -12,10 +12,15 @@ const StyledSidebar = styled.aside`
   gap: 3.2rem;
 `;
 
+const StyledDivider = styled.div`
+  border-bottom: 1px solid var(--color-grey-200);
+`;
+
 function Sidebar() {
   return (
     <StyledSidebar>
       <Logo />
+      <StyledDivider />
       <MainNav />
     </StyledSidebar>
   );

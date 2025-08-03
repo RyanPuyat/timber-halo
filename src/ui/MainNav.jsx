@@ -33,8 +33,8 @@ const StyledNavLink = styled(NavLink)`
   &:active,
   &.active:link,
   &.active:visited {
-    color: var(--color-grey-800);
-    background-color: var(--color-grey-50);
+    color: var(--color-brown-800);
+    background-color: var(--color-brown-50);
     border-radius: var(--border-radius-sm);
   }
 
@@ -49,7 +49,7 @@ const StyledNavLink = styled(NavLink)`
   &:active svg,
   &.active:link svg,
   &.active:visited svg {
-    color: var(--color-brand-600);
+    color: var(--color-terracota-600);
   }
 `;
 

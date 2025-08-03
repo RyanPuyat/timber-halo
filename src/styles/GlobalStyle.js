@@ -24,6 +24,34 @@ const GlobalStyles = createGlobalStyle`:root {
   --color-grey-800: #1f2937;
   --color-grey-900: #111827;
 
+  /*Brown*/
+--color-brown-0:    #fff8f0;
+--color-brown-50:   #fef3e6;
+--color-brown-100:  #fde9d3;
+--color-brown-200:  #fbd7b3;
+--color-brown-300:  #f5c08a;
+--color-brown-400:  #e6a25c;
+--color-brown-500:  #cc8233;
+--color-brown-600:  #b36e1f;
+--color-brown-700:  #a05f12;
+--color-brown-800:  #944f08;
+--color-brown-900:  #9c5500;
+
+/*Mustard*/
+--color-terracotta-50:   #fff4ec;   /* Soft clay wash */
+--color-terracotta-100:  #fddcc7;   /* Pale peach terracotta */
+--color-terracotta-200:  #f4b89c;   /* Warm blush clay */
+--color-terracotta-300:  #e79f74;   /* Buff orange */
+--color-terracotta-400:  #d6764b;   /* Classic terracotta */
+--color-terracotta-500:  #c46442;   /* Burnt sienna */
+--color-terracotta-600:  #ba4727;   /* Deep rust */
+--color-terracotta-700:  #a23a1f;   /* Clay brick */
+--color-terracotta-800:  #732405;   /* Sienna brown */
+--color-terracotta-900:  #4a1500;   /* Earthy umber */
+
+
+
+
   --color-blue-100: #e0f2fe;
   --color-blue-700: #0369a1;
   --color-green-100: #dcfce7;

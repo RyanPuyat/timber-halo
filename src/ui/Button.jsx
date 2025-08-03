@@ -59,9 +59,15 @@ const Button = styled.button`
   ${(props) => !props.size && sizes['medium']}
   ${(props) => !props.variation && variations['primary']}
 
+
   &:hover {
     background-color: var(--color-brand-700);
   }
 `;
+
+// Button.defaultProps = {
+//   $variation: 'primary',
+//   $size: 'medium',
+// };
 
 export default Button;
