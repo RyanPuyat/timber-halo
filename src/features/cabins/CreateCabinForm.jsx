@@ -6,7 +6,7 @@ import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCabin } from '../../services/apiCabins';
+import { createEditCabin } from '../../services/apiCabins';
 import toast from 'react-hot-toast';
 
 function CreateCabinForm() {
@@ -17,7 +17,7 @@ function CreateCabinForm() {
   const queryClient = useQueryClient();
 
   const { isPending: isCreating, mutate } = useMutation({
-    mutationFn: createCabin,
+    mutationFn: createEditCabin,
     onSuccess: () => {
       toast.success('New cabin item successfully created');
       queryClient.invalidateQueries({
@@ -29,7 +29,7 @@ function CreateCabinForm() {
   });
 
   function onSubmit(data) {
-    mutate({ ...data });
+    mutate({ ...data, image: data.image[0] });
   }
 
   function onError(errors) {
