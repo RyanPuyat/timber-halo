@@ -27,6 +27,7 @@ const Img = styled.img`
   aspect-ratio: 3 / 2;
   object-fit: cover;
   object-position: center;
+  padding-left: 1rem;
   transform: scale(1.5) translateX(-7px);
 `;
 
