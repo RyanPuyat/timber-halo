@@ -13,7 +13,7 @@ import { useBooking } from '../bookings/useBooking';
 import { useEffect, useState } from 'react';
 import Checkbox from '../../ui/Checkbox';
 import { formatCurrency } from '../../utils/helpers';
-import { useCheckin } from './useCheckin';
+import { useCheckin } from './usecheckin';
 import { useSettings } from '../settings/useSettings';
 
 const Box = styled.div`
@@ -112,7 +112,7 @@ function CheckinBooking() {
         <Button onClick={handleCheckin} disabled={!confirmPaid || isCheckingIn}>
           Check in booking #{bookingId}
         </Button>
-        <Button variation="secondary" onClick={moveBack}>
+        <Button $variation="secondary" onClick={moveBack}>
           Back
         </Button>
       </ButtonGroup>

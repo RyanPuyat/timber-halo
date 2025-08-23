@@ -23,7 +23,7 @@ function Sidebar() {
       <Logo />
       <StyledDivider />
       <MainNav />
-      <Uploader />
+      {/* <Uploader /> */}
     </StyledSidebar>
   );
 }
