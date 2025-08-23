@@ -1,16 +1,18 @@
+import { useUser } from '../authentication/useUser';
 import styled from 'styled-components';
-import { useUser } from './useUser';
 
-const StyledUserAvatar = styled.div`
+const MessageUserAvatar = styled.div`
   display: flex;
   gap: 1.2rem;
   align-items: center;
   font-weight: 500;
   font-size: 1.4rem;
   color: var(--color-grey-600);
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-grey-200);
 `;
 
-const Avatar = styled.img`
+const MessageAvatar = styled.img`
   display: block;
   height: 4rem;
   width: 4rem;
@@ -21,20 +23,18 @@ const Avatar = styled.img`
   outline: 2px solid var(--color-grey-100);
 `;
 
-function UserAvatar() {
+function MessageUser() {
   const { user } = useUser();
-  // if (!user || !user.user_metadata) return null;
   const { fullName, avatar } = user.user_metadata;
-
   return (
-    <StyledUserAvatar>
-      <Avatar
+    <MessageUserAvatar>
+      <MessageAvatar
         src={avatar || '/default-user.jpg'}
         alt={`Avatar of ${fullName}`}
       />
       <span>{fullName}</span>
-    </StyledUserAvatar>
+    </MessageUserAvatar>
   );
 }
 
-export default UserAvatar;
+export default MessageUser;
