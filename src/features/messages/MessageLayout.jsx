@@ -16,6 +16,10 @@ const StyledMessageLayout = styled.div`
   grid-template-rows: auto 1fr auto;
   height: 100%;
   border: 1px solid var(--color-grey-200);
+  border-radius: 15px;
+  box-shadow: var(--shadow-md);
+  background-color: var(--color-grey-0);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
 `;
 
 const HeaderContainer = styled.div`
@@ -40,41 +44,6 @@ const FooterContainer = styled.div`
   padding: 1rem;
 `;
 function MessageLayout() {
-  // const [receiver, setReceiver] = useState(null);
-  // const queryClient = useQueryClient();
-  // const { data: currentUser } = useCurrentUserProfile();
-
-  // const { messages, error } = useMessages(currentUser?.id, receiver?.id);
-  // const [liveMessages, setLiveMessages] = useState([]);
-  // const [combinedMessages, setCombinedMessages] = useState([]);
-  // useEffect(() => {
-  //   setLiveMessages(messages);
-  // }, [messages]);
-
-  // useEffect(() => {
-  //   if (messages) {
-  //     setCombinedMessages(messages);
-  //   }
-  // }, [messages]);
-
-  // useEffect(() => {
-  //   if (messages && messages.length > 0 && combinedMessages.length === 0) {
-  //     setCombinedMessages(messages);
-  //   }
-  // }, [messages, combinedMessages]);
-
-  // const handleNewRealtimeMessage = useCallback((newMsg) => {
-  //   console.log('🔔 New realtime message received:', newMsg);
-  //   setCombinedMessages((prev) => [...prev, newMsg]);
-  // }, []);
-  // useRealtimeMessages(currentUser?.id, receiver?.id, handleNewRealtimeMessage);
-
-  // if (error) return <p>Failed to load messages.</p>;
-
-  // async function handleSendMessage(receiverId, content) {
-  //   await sendMessage(currentUser.id, receiverId, content);
-  //   queryClient.invalidateQueries(['messages', currentUser.id, receiverId]);
-
   const {
     currentUser,
     receiver,

@@ -46,8 +46,8 @@ function UserSidebar({ onSelect }) {
               src={user.avatar_url || '/default-user.jpg'}
               alt={user.full_name}
             />
+            <span>{user.full_name}</span>
           </UserAvatar>
-          <span>{user.full_name}</span>
         </div>
       ))}
     </aside>

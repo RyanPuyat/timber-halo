@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useDarkMode } from '../../context/DarkModeContext';
 
 const MessagesWrapper = styled.div`
   flex: 1;
@@ -26,7 +27,13 @@ const MessageBubble = styled.div`
   max-width: 60%;
   padding: 10px 14px;
   border-radius: 16px;
-  background-color: ${({ $isSender }) => ($isSender ? '#DCF8C6' : '#FFF')};
+  background-color: ${({ $isSender, $isDarkMode }) =>
+    $isDarkMode
+      ? $isSender
+        ? 'var(--color-yellow-700)' // sender in dark mode
+        : 'var(--color-green-700)' // receiver in dark mode
+      : ''};
+  color: var(--color-grey-100);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 `;
 
@@ -42,6 +49,7 @@ const MessageText = styled.div`
 
 function ChatBox({ currentUser, receiver, messages = [] }) {
   const messagesEndRef = useRef();
+  const isDarkMode = useDarkMode();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -65,7 +73,7 @@ function ChatBox({ currentUser, receiver, messages = [] }) {
                     alt={sender.name}
                   />
                 )}
-                <MessageBubble $isSender={isSender}>
+                <MessageBubble $isSender={isSender} $isDarkMode={isDarkMode}>
                   <SenderName>{sender.name}</SenderName>
                   <MessageText>{msg.content}</MessageText>
                 </MessageBubble>
