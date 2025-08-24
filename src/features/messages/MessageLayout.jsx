@@ -1,17 +1,10 @@
-// import ChatBox from './ChatBox';
-import { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
-import { useCurrentUserProfile } from './useAllUsers';
-// import { useUser } from '../authentication/useUser';
-import { useMessages } from './useMessage';
-import { sendMessage } from '../../services/apiMessage';
+
+import { useChatSession } from './useChatSession';
 import MessageUser from './MessageUser';
 import UserSidebar from './UserSidebar';
 import ChatBox from '../messages/ChatBox';
-import { useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 import ChatForm from './ChatForm';
-import { useRealtimeMessages } from './useRealtimeMessages';
 
 const StyledMessageLayout = styled.div`
   display: grid;
@@ -47,13 +40,13 @@ const FooterContainer = styled.div`
   padding: 1rem;
 `;
 function MessageLayout() {
-  const [receiver, setReceiver] = useState(null);
-  const queryClient = useQueryClient();
-  const { data: currentUser } = useCurrentUserProfile();
+  // const [receiver, setReceiver] = useState(null);
+  // const queryClient = useQueryClient();
+  // const { data: currentUser } = useCurrentUserProfile();
 
-  const { messages, error } = useMessages(currentUser?.id, receiver?.id);
+  // const { messages, error } = useMessages(currentUser?.id, receiver?.id);
   // const [liveMessages, setLiveMessages] = useState([]);
-  const [combinedMessages, setCombinedMessages] = useState([]);
+  // const [combinedMessages, setCombinedMessages] = useState([]);
   // useEffect(() => {
   //   setLiveMessages(messages);
   // }, [messages]);
@@ -64,24 +57,34 @@ function MessageLayout() {
   //   }
   // }, [messages]);
 
-  useEffect(() => {
-    if (messages && messages.length > 0 && combinedMessages.length === 0) {
-      setCombinedMessages(messages);
-    }
-  }, [messages, combinedMessages]);
+  // useEffect(() => {
+  //   if (messages && messages.length > 0 && combinedMessages.length === 0) {
+  //     setCombinedMessages(messages);
+  //   }
+  // }, [messages, combinedMessages]);
 
-  const handleNewRealtimeMessage = useCallback((newMsg) => {
-    console.log('🔔 New realtime message received:', newMsg);
-    setCombinedMessages((prev) => [...prev, newMsg]);
-  }, []);
-  useRealtimeMessages(currentUser?.id, receiver?.id, handleNewRealtimeMessage);
+  // const handleNewRealtimeMessage = useCallback((newMsg) => {
+  //   console.log('🔔 New realtime message received:', newMsg);
+  //   setCombinedMessages((prev) => [...prev, newMsg]);
+  // }, []);
+  // useRealtimeMessages(currentUser?.id, receiver?.id, handleNewRealtimeMessage);
+
+  // if (error) return <p>Failed to load messages.</p>;
+
+  // async function handleSendMessage(receiverId, content) {
+  //   await sendMessage(currentUser.id, receiverId, content);
+  //   queryClient.invalidateQueries(['messages', currentUser.id, receiverId]);
+
+  const {
+    currentUser,
+    receiver,
+    setReceiver,
+    combinedMessages,
+    handleSendMessage,
+    error,
+  } = useChatSession();
 
   if (error) return <p>Failed to load messages.</p>;
-
-  async function handleSendMessage(receiverId, content) {
-    await sendMessage(currentUser.id, receiverId, content);
-    queryClient.invalidateQueries(['messages', currentUser.id, receiverId]);
-  }
 
   return (
     <StyledMessageLayout>

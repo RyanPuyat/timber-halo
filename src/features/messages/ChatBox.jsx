@@ -41,7 +41,6 @@ const MessageText = styled.div`
 `;
 
 function ChatBox({ currentUser, receiver, messages = [] }) {
-  //   const [content, setContent] = useState('');
   const messagesEndRef = useRef();
 
   useEffect(() => {

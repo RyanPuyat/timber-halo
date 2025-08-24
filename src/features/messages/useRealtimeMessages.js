@@ -3,7 +3,7 @@ import supabase from '../../services/supabase';
 
 export function useRealtimeMessages(senderId, receiverId, onMessage) {
   useEffect(() => {
-    console.log('🧠 useRealtimeMessages running with:', senderId, receiverId);
+    // console.log('🧠 useRealtimeMessages running with:', senderId, receiverId);
     if (!senderId || !receiverId || !onMessage) return;
 
     const channel = supabase
@@ -16,7 +16,7 @@ export function useRealtimeMessages(senderId, receiverId, onMessage) {
           table: 'messages',
         },
         (payload) => {
-          console.log('📡 Supabase payload received:', payload);
+          // console.log('📡 Supabase payload received:', payload);
           const newMessage = payload.new;
 
           const isRelevant =
