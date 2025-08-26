@@ -27,13 +27,13 @@ function UserSidebar({ onSelect }) {
 
   if (isPending || !currentUser) return <Spinner />;
 
-  const filteredProfiles = profiles.filter(
+  const filteredProfiles = profiles?.filter(
     (user) => user.id !== currentUser.id
   );
 
   return (
     <aside>
-      {filteredProfiles.map((user) => (
+      {filteredProfiles?.map((user) => (
         <div
           key={user.id}
           onClick={() => {

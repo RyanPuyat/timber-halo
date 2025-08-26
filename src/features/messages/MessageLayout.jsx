@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { playMessageSound } from './useSoundAlert';
 import { useChatSession } from './useChatSession';
 import MessageUser from './MessageUser';
 import UserSidebar from './UserSidebar';
@@ -63,6 +63,7 @@ function MessageLayout() {
 
       <SidebarContainer>
         <UserSidebar onSelect={(user) => setReceiver(user)} />
+        <button onClick={playMessageSound}>Test Sound</button>
       </SidebarContainer>
 
       <MainContent>

@@ -25,8 +25,28 @@ export async function sendMessage(senderId, receiverId, content) {
       sender_id: senderId,
       receiver_id: receiverId,
       content,
+      read: false,
     },
   ]);
 
   if (error) throw new Error('Failed to send message');
+}
+
+export async function getUnreadMessageCount(userId) {
+  console.log('Function called with:', userId);
+  try {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*', { count: 'exact', head: true })
+      .eq('receiver_id', userId)
+      .eq('read', false);
+
+    console.log('Supabase response:', { data, error });
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Unread message fetch failed:', err);
+    throw err;
+  }
 }

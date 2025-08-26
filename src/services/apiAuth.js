@@ -58,33 +58,79 @@ export async function logout() {
   if (error) throw new Error(error.message);
 }
 
+// export async function updateCurrentUser({ password, fullName, avatar }) {
+//   // 1. Update password OR fullName
+//   let updateData;
+//   if (password) updateData = { password };
+//   if (fullName) updateData = { data: { fullName } };
+
+//   const { data, error } = await supabase.auth.updateUser(updateData);
+
+//   if (error) throw new Error(error.message);
+//   if (!avatar) return data;
+
+//   // 2. Upload the avatar image
+//   const fileName = `avatar-${data.user.id}-${Math.random()}`;
+
+//   const { error: storageError } = await supabase.storage
+//     .from('avatars')
+//     .upload(fileName, avatar);
+
+//   if (storageError) throw new Error(storageError.message);
+
+//   // 3. Update avatar in the user
+//   const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
+//     data: {
+//       avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+//     },
+//   });
+
+//   if (error2) throw new Error(error2.message);
+//   return updatedUser;
+// }
 export async function updateCurrentUser({ password, fullName, avatar }) {
-  // 1. Update password OR fullName
+  // 1. Update password or fullName in auth.users
   let updateData;
   if (password) updateData = { password };
   if (fullName) updateData = { data: { fullName } };
 
   const { data, error } = await supabase.auth.updateUser(updateData);
-
   if (error) throw new Error(error.message);
-  if (!avatar) return data;
 
-  // 2. Upload the avatar image
-  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+  const userId = data.user.id;
+  let avatarUrl;
 
-  const { error: storageError } = await supabase.storage
-    .from('avatars')
-    .upload(fileName, avatar);
+  // 2. Upload avatar to storage
+  if (avatar) {
+    const fileName = `avatar-${userId}-${Math.random()}`;
+    const { error: storageError } = await supabase.storage
+      .from('avatars')
+      .upload(fileName, avatar, { upsert: true });
 
-  if (storageError) throw new Error(storageError.message);
+    if (storageError) throw new Error(storageError.message);
 
-  // 3. Update avatar in the user
-  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
-    data: {
-      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
-    },
-  });
+    avatarUrl = `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`;
 
-  if (error2) throw new Error(error2.message);
-  return updatedUser;
+    // 3. Update avatar in auth.users metadata
+    const { error: error2 } = await supabase.auth.updateUser({
+      data: { avatar: avatarUrl },
+    });
+    if (error2) throw new Error(error2.message);
+  }
+
+  // 4. Sync to profiles table
+  const profileUpdate = {};
+  if (fullName) profileUpdate.full_name = fullName;
+  if (avatarUrl) profileUpdate.avatar_url = avatarUrl;
+
+  if (Object.keys(profileUpdate).length > 0) {
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update(profileUpdate)
+      .eq('id', userId);
+
+    if (profileError) throw new Error(profileError.message);
+  }
+
+  return { ...data.user, ...profileUpdate };
 }
