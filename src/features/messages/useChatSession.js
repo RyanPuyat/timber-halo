@@ -9,6 +9,7 @@ export function useChatSession() {
   const [receiver, setReceiver] = useState(null);
   const [combinedMessages, setCombinedMessages] = useState([]);
   const queryClient = useQueryClient();
+
   const { data: currentUser } = useCurrentUserProfile();
   const { messages, error } = useMessages(currentUser?.id, receiver?.id);
 
@@ -25,7 +26,7 @@ export function useChatSession() {
   useRealtimeMessages(currentUser?.id, receiver?.id, handleNewRealtimeMessage);
 
   async function handleSendMessage(receiverId, content) {
-    await sendMessage(currentUser.id, receiverId, content);
+    await sendMessage(currentUser?.id, receiverId, content);
     queryClient.invalidateQueries(['messages', currentUser.id, receiverId]);
   }
 

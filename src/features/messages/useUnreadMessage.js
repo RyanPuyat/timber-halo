@@ -16,6 +16,7 @@ export function useUnreadMessage(userId, onUnreadMessage) {
           filter: `receiver_id=eq.${userId}`,
         },
         (payload) => {
+          console.log('📦 New message payload:', payload);
           const newMessage = payload.new;
           if (newMessage.read === false) {
             onUnreadMessage(newMessage);

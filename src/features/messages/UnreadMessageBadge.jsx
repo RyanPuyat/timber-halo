@@ -1,8 +1,8 @@
 import { useUnreadMessage } from '../messages/useUnreadMessage';
 import { useCurrentUserProfile } from '../messages/useAllUsers';
-import styled from 'styled-components';
-import { useState } from 'react';
 import { playMessageSound } from './useSoundAlert';
+import { useUnreadMessages } from '../../context/UnreadMessageContext';
+import styled from 'styled-components';
 
 const NotificationBadge = styled.span`
   position: absolute;
@@ -35,31 +35,59 @@ const NotificationBadge = styled.span`
     }
   }
 `;
-
 function UnreadMessageBadge() {
   const { data: currentUser } = useCurrentUserProfile();
-
   const userId = currentUser?.id;
-  // const { isPending, unreadCount } = useUnreadMessageCount(userId);
+  const { unreadCounts, incrementUnread } = useUnreadMessages();
 
-  // if (isPending || unreadCount === 0) return null;
-
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  useUnreadMessage(userId, () => {
-    setUnreadCount((prev) => prev + 1);
+  useUnreadMessage(userId, (message) => {
+    const senderId = message.sender_id;
+    if (typeof senderId === 'string') {
+      incrementUnread(senderId);
+      playMessageSound();
+    } else {
+      console.warn('⚠️ Invalid senderId:', senderId);
+    }
     playMessageSound();
   });
 
-  if (unreadCount === 0) return null;
+  const totalUnread = Object.values(unreadCounts).reduce((a, b) => a + b, 0);
+
+  if (totalUnread === 0) return null;
 
   return (
-    <>
-      <NotificationBadge>
-        {unreadCount > 99 ? '99+' : unreadCount}
-      </NotificationBadge>
-    </>
+    <NotificationBadge>
+      {totalUnread > 99 ? '99+' : totalUnread}
+    </NotificationBadge>
   );
 }
 
 export default UnreadMessageBadge;
+
+// function UnreadMessageBadge() {
+//   const { data: currentUser } = useCurrentUserProfile();
+//   const userId = currentUser?.id;
+
+//   const [unreadCounts, setUnreadCounts] = useState({});
+
+//   useUnreadMessage(userId, (message) => {
+//     const senderId = message.senderId;
+//     setUnreadCounts((prev) => ({
+//       ...prev,
+//       [senderId]: (prev[senderId] || 0) + 1,
+//     }));
+//     playMessageSound();
+//   });
+
+//   if (unreadCounts === 0) return null;
+
+//   return (
+//     <>
+//       <NotificationBadge>
+//         {unreadCounts > 99 ? '99+' : unreadCounts}
+//       </NotificationBadge>
+//     </>
+//   );
+// }
+
+// export default UnreadMessageBadge;

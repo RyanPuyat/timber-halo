@@ -1,6 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllProfiles } from '../../services/apiProfiles';
-import supabase from '../../services/supabase';
+import {
+  getAllProfiles,
+  getAuthUser,
+  getUserProfile,
+} from '../../services/apiProfiles';
 
 export function useAllUsers() {
   const {
@@ -16,24 +19,36 @@ export function useAllUsers() {
 }
 
 export function useCurrentUserProfile() {
-  return useQuery({
-    queryKey: ['currentUser'],
-    queryFn: async () => {
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-      if (authError) throw new Error('Failed to fetch auth user');
-
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (profileError) throw new Error('Failed to fetch profile');
-
-      return { ...user, ...profile };
-    },
+  // Step 1: Fetch the authenticated user
+  const {
+    data: authUser,
+    isLoading: AuthLoading,
+    error: authError,
+  } = useQuery({
+    queryKey: ['authUser'],
+    queryFn: getAuthUser,
   });
+
+  // Step 2: Fetch the full profile using the auth user's ID
+  const userId = authUser?.id;
+
+  const {
+    data,
+    isPending: ProfileLoading,
+    error: profileError,
+  } = useQuery({
+    queryKey: ['userProfile', userId],
+    queryFn: getUserProfile,
+    enabled: !!userId, // only run when userId is available
+  });
+
+  // Combine loading and error states
+  const isLoading = AuthLoading || ProfileLoading;
+  const error = authError || profileError;
+
+  return {
+    data,
+    isLoading,
+    error,
+  };
 }

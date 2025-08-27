@@ -1,6 +1,6 @@
 import Spinner from '../../ui/Spinner';
-import { useAllUsers, useCurrentUserProfile } from './useAllUsers';
 import styled from 'styled-components';
+import { useAllUsers, useCurrentUserProfile } from './useAllUsers';
 
 const UserAvatar = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const Avatar = styled.img`
 `;
 
 function UserSidebar({ onSelect }) {
-  const { profiles } = useAllUsers(); // This should fetch all profiles
+  const { profiles } = useAllUsers();
   const { data: currentUser, isPending } = useCurrentUserProfile(); // Authenticated user
 
   if (isPending || !currentUser) return <Spinner />;
@@ -37,7 +37,6 @@ function UserSidebar({ onSelect }) {
         <div
           key={user.id}
           onClick={() => {
-            // console.log('User selected:', user);
             onSelect(user);
           }}
         >

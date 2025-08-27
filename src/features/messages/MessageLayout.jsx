@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-import { playMessageSound } from './useSoundAlert';
-import { useChatSession } from './useChatSession';
 import MessageUser from './MessageUser';
 import UserSidebar from './UserSidebar';
 import ChatBox from '../messages/ChatBox';
 import ChatForm from './ChatForm';
+import { playMessageSound } from './useSoundAlert';
+import { useChatSession } from './useChatSession';
+import { useUnreadMessages } from '../../context/UnreadMessageContext';
+import { useEffect } from 'react';
 
 const StyledMessageLayout = styled.div`
   display: grid;
@@ -43,6 +45,7 @@ const FooterContainer = styled.div`
   border-top: 1px solid var(--color-grey-200);
   padding: 1rem;
 `;
+
 function MessageLayout() {
   const {
     currentUser,
@@ -53,6 +56,25 @@ function MessageLayout() {
     error,
   } = useChatSession();
 
+  const { unreadCounts, resetUnread } = useUnreadMessages();
+
+  // function handleIncomingMessage(message) {
+  //   incrementUnread(message.senderId);
+  //   playMessageSound();
+  // }
+
+  // useEffect(() => {
+  //   console.log('Updated unreadCounts:', unreadCounts);
+  // }, [unreadCounts]);
+
+  function handleUserSelect(user) {
+    // console.log('Before reset:', unreadCounts);
+    resetUnread(user.id);
+    // console.log('Selected user:', user);
+    // console.log('After reset:', unreadCounts);
+    setReceiver(user);
+  }
+
   if (error) return <p>Failed to load messages.</p>;
 
   return (
@@ -62,7 +84,7 @@ function MessageLayout() {
       </HeaderContainer>
 
       <SidebarContainer>
-        <UserSidebar onSelect={(user) => setReceiver(user)} />
+        <UserSidebar onSelect={handleUserSelect} unreadCounts={unreadCounts} />
         <button onClick={playMessageSound}>Test Sound</button>
       </SidebarContainer>
 
