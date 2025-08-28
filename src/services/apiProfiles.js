@@ -20,29 +20,6 @@ export async function getAuthUser() {
   return user;
 }
 
-// export function useCurrentUserProfile() {
-//   return useQuery({
-//     queryKey: ['currentUser'],
-//     queryFn: async () => {
-//       const {
-//         data: { user },
-//         error: authError,
-//       } = await supabase.auth.getUser();
-//       if (authError) throw new Error('Failed to fetch auth user');
-
-//       const { data: profile, error: profileError } = await supabase
-//         .from('profiles')
-//         .select('*')
-//         .eq('id', user.id)
-//         .single();
-
-//       if (profileError) throw new Error('Failed to fetch profile');
-
-//       return { ...user, ...profile };
-//     },
-//   });
-// }
-
 export async function getUserProfile({ queryKey }) {
   const [, userId] = queryKey;
 

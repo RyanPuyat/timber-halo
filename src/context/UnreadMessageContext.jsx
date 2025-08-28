@@ -4,6 +4,8 @@ const UnreadMessageContext = createContext();
 
 function UnreadMessageProvider({ children }) {
   const [unreadCounts, setUnreadCounts] = useState({});
+  const [activeUserId, setActiveUserId] = useState(null);
+  const [receiverId, setReceiverId] = useState(null);
 
   function incrementUnread(senderId) {
     setUnreadCounts((prev) => ({
@@ -25,7 +27,15 @@ function UnreadMessageProvider({ children }) {
 
   return (
     <UnreadMessageContext.Provider
-      value={{ unreadCounts, incrementUnread, resetUnread }}
+      value={{
+        unreadCounts,
+        incrementUnread,
+        resetUnread,
+        activeUserId,
+        setActiveUserId,
+        receiverId,
+        setReceiverId,
+      }}
     >
       {children}
     </UnreadMessageContext.Provider>

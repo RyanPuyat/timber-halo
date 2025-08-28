@@ -31,6 +31,7 @@ export function useCurrentUserProfile() {
 
   // Step 2: Fetch the full profile using the auth user's ID
   const userId = authUser?.id;
+  // const userId = typeof authUser?.id === 'string' ? authUser.id : null;
 
   const {
     data,

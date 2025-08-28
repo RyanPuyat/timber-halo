@@ -33,7 +33,7 @@ export async function sendMessage(senderId, receiverId, content) {
 }
 
 export async function getUnreadMessageCount(userId) {
-  console.log('Function called with:', userId);
+  // console.log('Function called with:', userId);
   try {
     const { data, error } = await supabase
       .from('messages')
@@ -41,7 +41,7 @@ export async function getUnreadMessageCount(userId) {
       .eq('receiver_id', userId)
       .eq('read', false);
 
-    console.log('Supabase response:', { data, error });
+    // console.log('Supabase response:', { data, error });
 
     if (error) throw error;
     return data;

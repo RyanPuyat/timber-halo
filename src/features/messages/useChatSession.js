@@ -13,11 +13,25 @@ export function useChatSession() {
   const { data: currentUser } = useCurrentUserProfile();
   const { messages, error } = useMessages(currentUser?.id, receiver?.id);
 
+  // useEffect(() => {
+  //   // if (messages && messages.length > 0 && combinedMessages.length === 0) {
+  //   if (messages) {
+  //     setCombinedMessages(messages);
+  //   }
+  // }, [messages]);
+
   useEffect(() => {
-    if (messages && messages.length > 0 && combinedMessages.length === 0) {
+    if (messages && !areArraysEqual(messages, combinedMessages)) {
       setCombinedMessages(messages);
     }
-  }, [messages, combinedMessages]);
+  }, [messages]);
+
+  function areArraysEqual(arr1, arr2) {
+    return (
+      arr1.length === arr2.length &&
+      arr1.every((msg, i) => msg.id === arr2[i]?.id)
+    );
+  }
 
   const handleNewRealtimeMessage = useCallback((newMsg) => {
     setCombinedMessages((prev) => [...prev, newMsg]);

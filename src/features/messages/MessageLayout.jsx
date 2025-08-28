@@ -3,9 +3,9 @@ import MessageUser from './MessageUser';
 import UserSidebar from './UserSidebar';
 import ChatBox from '../messages/ChatBox';
 import ChatForm from './ChatForm';
-import { playMessageSound } from './useSoundAlert';
 import { useChatSession } from './useChatSession';
 import { useUnreadMessages } from '../../context/UnreadMessageContext';
+// import { NotificationBadge } from '../../ui/NotificationBadge';
 import { useEffect } from 'react';
 
 const StyledMessageLayout = styled.div`
@@ -56,24 +56,23 @@ function MessageLayout() {
     error,
   } = useChatSession();
 
-  const { unreadCounts, resetUnread } = useUnreadMessages();
-
-  // function handleIncomingMessage(message) {
-  //   incrementUnread(message.senderId);
-  //   playMessageSound();
-  // }
-
-  // useEffect(() => {
-  //   console.log('Updated unreadCounts:', unreadCounts);
-  // }, [unreadCounts]);
+  const { unreadCounts, resetUnread, receiverId, setReceiverId } =
+    useUnreadMessages();
 
   function handleUserSelect(user) {
     // console.log('Before reset:', unreadCounts);
+    setReceiverId(user.id);
     resetUnread(user.id);
     // console.log('Selected user:', user);
     // console.log('After reset:', unreadCounts);
     setReceiver(user);
   }
+
+  useEffect(() => {
+    return () => {
+      setReceiverId(null); // Reset when leaving the page
+    };
+  }, []);
 
   if (error) return <p>Failed to load messages.</p>;
 
@@ -84,8 +83,14 @@ function MessageLayout() {
       </HeaderContainer>
 
       <SidebarContainer>
-        <UserSidebar onSelect={handleUserSelect} unreadCounts={unreadCounts} />
-        <button onClick={playMessageSound}>Test Sound</button>
+        {/* <NotificationBadge count={unreadCounts} pulse> */}
+        <UserSidebar
+          onSelect={handleUserSelect}
+          unreadCounts={unreadCounts}
+          receiverId={receiverId}
+        />
+        {/* <button onClick={playMessageSound}>Test Sound</button> */}
+        {/* </NotificationBadge> */}
       </SidebarContainer>
 
       <MainContent>
