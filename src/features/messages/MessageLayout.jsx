@@ -51,8 +51,11 @@ function MessageLayout() {
     currentUser,
     receiver,
     setReceiver,
-    combinedMessages,
+    // combinedMessages,
+
+    messages,
     handleSendMessage,
+    file,
     error,
   } = useChatSession();
 
@@ -98,7 +101,7 @@ function MessageLayout() {
           <ChatBox
             currentUser={currentUser}
             receiver={receiver}
-            messages={combinedMessages}
+            messages={messages}
           />
         ) : (
           <p style={{ padding: '2rem' }}>Select a user to start chatting.</p>
@@ -106,7 +109,11 @@ function MessageLayout() {
       </MainContent>
       <FooterContainer>
         {receiver && (
-          <ChatForm onSendMessage={handleSendMessage} receiver={receiver} />
+          <ChatForm
+            onSendMessage={handleSendMessage}
+            receiver={receiver}
+            file={file}
+          />
         )}
       </FooterContainer>
     </StyledMessageLayout>

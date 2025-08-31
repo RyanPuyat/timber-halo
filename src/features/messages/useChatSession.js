@@ -1,55 +1,92 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useMessages } from './useMessage';
-import { useRealtimeMessages } from './useRealtimeMessages';
-import { sendMessage } from '../../services/apiMessage';
+import { useState, useMemo } from 'react';
 import { useCurrentUserProfile } from './useAllUsers';
+import { sendMessage } from '../../services/apiMessage';
+import { useLiveMessages } from './useRealtimeMessages'; // Import the new hook
 
 export function useChatSession() {
   const [receiver, setReceiver] = useState(null);
-  const [combinedMessages, setCombinedMessages] = useState([]);
-  const queryClient = useQueryClient();
-
   const { data: currentUser } = useCurrentUserProfile();
-  const { messages, error } = useMessages(currentUser?.id, receiver?.id);
 
-  // useEffect(() => {
-  //   // if (messages && messages.length > 0 && combinedMessages.length === 0) {
-  //   if (messages) {
-  //     setCombinedMessages(messages);
-  //   }
-  // }, [messages]);
+  const userIds = useMemo(() => {
+    return {
+      senderId: currentUser?.id,
+      receiverId: receiver?.id,
+    };
+  }, [currentUser?.id, receiver?.id]);
 
-  useEffect(() => {
-    if (messages && !areArraysEqual(messages, combinedMessages)) {
-      setCombinedMessages(messages);
-    }
-  }, [messages]);
+  const { messages, error } = useLiveMessages(
+    userIds.senderId,
+    userIds.receiverId
+  );
 
-  function areArraysEqual(arr1, arr2) {
-    return (
-      arr1.length === arr2.length &&
-      arr1.every((msg, i) => msg.id === arr2[i]?.id)
-    );
-  }
-
-  const handleNewRealtimeMessage = useCallback((newMsg) => {
-    setCombinedMessages((prev) => [...prev, newMsg]);
-  }, []);
-
-  useRealtimeMessages(currentUser?.id, receiver?.id, handleNewRealtimeMessage);
-
-  async function handleSendMessage(receiverId, content) {
-    await sendMessage(currentUser?.id, receiverId, content);
-    queryClient.invalidateQueries(['messages', currentUser.id, receiverId]);
+  async function handleSendMessage(receiverId, content, file) {
+    await sendMessage(currentUser?.id, receiverId, content, file);
   }
 
   return {
     currentUser,
     receiver,
     setReceiver,
-    combinedMessages,
+    messages,
     handleSendMessage,
     error,
   };
 }
+
+// import { useState, useEffect, useCallback } from 'react';
+// import { useQueryClient } from '@tanstack/react-query';
+// import { useMessages } from './useMessage';
+// import { useRealtimeMessages } from './useRealtimeMessages';
+// import { sendMessage } from '../../services/apiMessage';
+// import { useCurrentUserProfile } from './useAllUsers';
+
+// export function useChatSession() {
+//   const [receiver, setReceiver] = useState(null);
+//   const [combinedMessages, setCombinedMessages] = useState([]);
+//   const queryClient = useQueryClient();
+
+//   const { data: currentUser } = useCurrentUserProfile();
+//   const { messages, error } = useMessages(currentUser?.id, receiver?.id);
+
+//   useEffect(() => {
+//     if (!receiver || !messages || messages.length === 0) return;
+
+//     setCombinedMessages((prev) => {
+//       const prevIds = new Set(prev.map((msg) => msg.id));
+//       const newMessages = messages.filter((msg) => !prevIds.has(msg.id));
+
+//       if (newMessages.length === 0) return prev;
+
+//       return [...prev, ...newMessages];
+//     });
+//   }, [messages, receiver]);
+
+//   const handleNewRealtimeMessage = useCallback((newMsg) => {
+//     setCombinedMessages((prev) => [...prev, newMsg]);
+//   }, []);
+
+//   const handleDeleteRealtimeMessage = useCallback((deletedId) => {
+//     setCombinedMessages((prev) => prev.filter((msg) => msg.id !== deletedId));
+//   }, []);
+
+//   useRealtimeMessages(
+//     currentUser?.id,
+//     receiver?.id,
+//     handleNewRealtimeMessage,
+//     handleDeleteRealtimeMessage
+//   );
+
+//   async function handleSendMessage(receiverId, content, file) {
+//     await sendMessage(currentUser?.id, receiverId, content, file);
+//     queryClient.invalidateQueries(['messages', currentUser.id, receiverId]);
+//   }
+
+//   return {
+//     currentUser,
+//     receiver,
+//     setReceiver,
+//     combinedMessages,
+//     handleSendMessage,
+//     error,
+//   };
+// }

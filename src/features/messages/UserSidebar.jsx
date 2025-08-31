@@ -21,6 +21,12 @@ const Avatar = styled.img`
   border-radius: 50%;
   outline: 2px solid var(--color-grey-100);
 `;
+const Aside = styled.aside`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+`;
 
 function UserSidebar({ onSelect, receiverId }) {
   const { profiles } = useAllUsers();
@@ -35,7 +41,7 @@ function UserSidebar({ onSelect, receiverId }) {
   // const totalUnread = Object.values(unreadCounts).reduce((a, b) => a + b, 0);
 
   return (
-    <aside>
+    <Aside>
       {filteredProfiles?.map((user) => {
         const unread = unreadCounts[user.id] || 0;
         const showBadge = user.id !== receiverId && unread > 0;
@@ -61,7 +67,7 @@ function UserSidebar({ onSelect, receiverId }) {
           </div>
         );
       })}
-    </aside>
+    </Aside>
   );
 }
 
