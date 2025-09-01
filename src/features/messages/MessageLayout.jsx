@@ -3,6 +3,7 @@ import MessageUser from './MessageUser';
 import UserSidebar from './UserSidebar';
 import ChatBox from '../messages/ChatBox';
 import ChatForm from './ChatForm';
+import { markMessagesAsRead } from '../../services/apiMessage';
 import { useChatSession } from './useChatSession';
 import { useUnreadMessages } from '../../context/UnreadMessageContext';
 // import { NotificationBadge } from '../../ui/NotificationBadge';
@@ -62,13 +63,25 @@ function MessageLayout() {
   const { unreadCounts, resetUnread, receiverId, setReceiverId } =
     useUnreadMessages();
 
-  function handleUserSelect(user) {
-    // console.log('Before reset:', unreadCounts);
+  // function handleUserSelect(user) {
+  //   // console.log('Before reset:', unreadCounts);
+  //   setReceiverId(user.id);
+  //   resetUnread(user.id);
+  //   // console.log('Selected user:', user);
+  //   // console.log('After reset:', unreadCounts);
+  //   setReceiver(user);
+  // }
+
+  async function handleUserSelect(user) {
     setReceiverId(user.id);
-    resetUnread(user.id);
-    // console.log('Selected user:', user);
-    // console.log('After reset:', unreadCounts);
     setReceiver(user);
+
+    try {
+      await markMessagesAsRead(user.id, currentUser.id); // backend update
+      resetUnread(user.id); // local context update
+    } catch (err) {
+      console.error('Failed to mark messages as read:', err);
+    }
   }
 
   useEffect(() => {
@@ -102,6 +115,7 @@ function MessageLayout() {
             currentUser={currentUser}
             receiver={receiver}
             messages={messages}
+            // messages={combinedMessages}
           />
         ) : (
           <p style={{ padding: '2rem' }}>Select a user to start chatting.</p>

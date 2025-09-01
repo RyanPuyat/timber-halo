@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Button from '../../ui/Button';
 import useEmojiPicker from '../messages/useEmojiPicker';
@@ -67,6 +67,8 @@ function ChatForm({ receiver, onSendMessage }) {
   const editableRef = useRef(null);
   const fileInputRef = useRef(null);
 
+  const [renderPicker, setRenderPicker] = useState(false);
+
   const {
     visible: showEmojiPicker,
     togglePicker,
@@ -74,6 +76,14 @@ function ChatForm({ receiver, onSendMessage }) {
     saveCursor,
     setVisible,
   } = useEmojiPicker(editableRef);
+
+  useEffect(() => {
+    if (showEmojiPicker) {
+      requestAnimationFrame(() => setRenderPicker(true));
+    } else {
+      setRenderPicker(false);
+    }
+  }, [showEmojiPicker]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -114,10 +124,25 @@ function ChatForm({ receiver, onSendMessage }) {
           data-placeholder="Type a message..."
           onKeyUp={saveCursor}
           onMouseUp={saveCursor}
+          onInput={saveCursor}
+          onFocus={saveCursor}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault(); // Prevent newline
+              document.querySelector('form').requestSubmit(); // Trigger form submit
+            }
+          }}
         />
         {showEmojiPicker && (
           <EmojiPickerOverlay
             onEmojiClick={insertEmoji}
+            lazyLoadEmojis
+            skinTonesDisabled
+            searchDisabled
+            height={300}
+            width={320}
+            emojiStyle="native"
+            categories={['smileys', 'animals', 'food']}
             onClose={() => setVisible(false)}
           />
         )}
@@ -129,9 +154,11 @@ function ChatForm({ receiver, onSendMessage }) {
       >
         📷
       </UploadButton>
+
       <EmojiButton type="button" onClick={togglePicker} title="Insert emoji">
         😊
       </EmojiButton>
+
       <input
         ref={fileInputRef}
         type="file"

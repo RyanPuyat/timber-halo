@@ -90,16 +90,42 @@ export async function sendMessage(senderId, receiverId, content, file) {
 
 export async function getUnreadMessageCount(userId) {
   try {
-    const { data, error } = await supabase
+    const { data: messages, error } = await supabase
       .from('messages')
-      .select('*', { count: 'exact', head: true })
+      // .select('*', { count: 'exact', head: true })
+      .select('sender_id')
+
       .eq('receiver_id', userId)
       .eq('read', false);
 
     if (error) throw error;
-    return data;
+    // return data;
+
+    const counts = {};
+    messages.forEach(({ sender_id }) => {
+      counts[sender_id] = (counts[sender_id] || 0) + 1;
+    });
+
+    return counts; // e.g. { user2: 1, user3: 1 }
+    // return count;
   } catch (err) {
     console.error('Unread message fetch failed:', err);
+    throw err;
+  }
+}
+
+export async function markMessagesAsRead(senderId, receiverId) {
+  try {
+    const { error } = await supabase
+      .from('messages')
+      .update({ read: true })
+      .eq('sender_id', senderId)
+      .eq('receiver_id', receiverId)
+      .eq('read', false);
+
+    if (error) throw error;
+  } catch (err) {
+    console.error('Failed to mark messages as read:', err);
     throw err;
   }
 }

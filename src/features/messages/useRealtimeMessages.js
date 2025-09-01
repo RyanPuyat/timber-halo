@@ -9,7 +9,7 @@ export function useLiveMessages(senderId, receiverId) {
 
   useEffect(() => {
     if (!senderId || !receiverId) {
-      console.log('Realtime subscription skipped: missing IDs');
+      // console.log('Realtime subscription skipped: missing IDs');
       return;
     }
 
@@ -56,10 +56,10 @@ export function useLiveMessages(senderId, receiverId) {
             if (!oldMessages) return [];
 
             if (eventType === 'INSERT') {
-              console.log(
-                '✅ INSERT event detected. New message:',
-                payload.new
-              );
+              // console.log(
+              //   '✅ INSERT event detected. New message:',
+              //   payload.new
+              // );
               // Add a new message, preventing duplicates
               const isDuplicate = oldMessages.some(
                 (msg) => msg.id === newRow.id
@@ -68,10 +68,10 @@ export function useLiveMessages(senderId, receiverId) {
             }
             console.log('Event type received:', eventType);
             if (eventType === 'DELETE') {
-              console.log(
-                '❌ DELETE event detected. Deleted message ID:',
-                payload.old.id
-              );
+              // console.log(
+              //   '❌ DELETE event detected. Deleted message ID:',
+              //   payload.old.id
+              // );
               // Remove a deleted message
               return oldMessages.filter((msg) => msg.id !== oldRow.id);
             }
