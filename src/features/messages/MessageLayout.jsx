@@ -63,15 +63,6 @@ function MessageLayout() {
   const { unreadCounts, resetUnread, receiverId, setReceiverId } =
     useUnreadMessages();
 
-  // function handleUserSelect(user) {
-  //   // console.log('Before reset:', unreadCounts);
-  //   setReceiverId(user.id);
-  //   resetUnread(user.id);
-  //   // console.log('Selected user:', user);
-  //   // console.log('After reset:', unreadCounts);
-  //   setReceiver(user);
-  // }
-
   async function handleUserSelect(user) {
     setReceiverId(user.id);
     setReceiver(user);
@@ -99,14 +90,11 @@ function MessageLayout() {
       </HeaderContainer>
 
       <SidebarContainer>
-        {/* <NotificationBadge count={unreadCounts} pulse> */}
         <UserSidebar
           onSelect={handleUserSelect}
           unreadCounts={unreadCounts}
           receiverId={receiverId}
         />
-        {/* <button onClick={playMessageSound}>Test Sound</button> */}
-        {/* </NotificationBadge> */}
       </SidebarContainer>
 
       <MainContent>

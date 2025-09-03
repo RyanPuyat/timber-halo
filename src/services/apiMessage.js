@@ -18,6 +18,21 @@ export async function getMessages(senderId, receiverId) {
       (msg.sender_id === receiverId && msg.receiver_id === senderId)
   );
 
+  // const unreadMessages = filtered.filter(
+  //   (msg) =>
+  //     msg.receiver_id === senderId && // senderId is the current user viewing
+  //     !msg.read_at
+  // );
+
+  // if (unreadMessages.length > 0) {
+  //   const idsToUpdate = unreadMessages.map((msg) => msg.id);
+
+  //   await supabase
+  //     .from('messages')
+  //     .update({ read_at: new Date().toISOString() })
+  //     .in('id', idsToUpdate);
+  // }
+
   const enriched = await Promise.all(
     filtered.map(async (msg) => {
       if (msg.file_url) {
@@ -86,6 +101,19 @@ export async function sendMessage(senderId, receiverId, content, file) {
   ]);
 
   if (error) throw new Error('Failed to send message');
+}
+
+export async function updateStatusAsRead(messageIds) {
+  if (!messageIds.length) return;
+
+  const { error } = await supabase
+    .from('messages')
+    .update({ read_at: new Date().toISOString(), read: true })
+    .in('id', messageIds);
+
+  if (error) {
+    console.error('Failed to mark messages as read:', error);
+  }
 }
 
 export async function getUnreadMessageCount(userId) {

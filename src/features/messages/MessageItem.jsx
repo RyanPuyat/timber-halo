@@ -3,11 +3,17 @@ import Menus from '../../ui/Menus';
 import { HiDownload, HiTrash } from 'react-icons/hi';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import Modal from '../../ui/Modal';
+import { formatInTimeZone } from 'date-fns-tz';
+import { userTimeZone } from '../../utils/helpers';
 
 const Avatar = styled.img`
-  width: 32px;
-  height: 32px;
+  display: block;
+  height: 4rem;
+  width: 4rem;
+  object-fit: cover;
+  object-position: center;
   border-radius: 50%;
+  outline: 2px solid var(--color-grey-100);
   margin-right: 8px;
 `;
 
@@ -61,6 +67,13 @@ const MessageFile = styled.div`
   margin-top: 8px;
 `;
 
+const Seen = styled.span`
+  display: block;
+  font-size: 1rem;
+  color: ${({ $isDarkMode }) => ($isDarkMode ? 'var(--color-grey-500)' : '')};
+  margin-top: 4px;
+`;
+
 function MessageItem({
   msg,
   isSender,
@@ -69,6 +82,17 @@ function MessageItem({
   isDeleting,
   deleteMessage,
 }) {
+  // const readAtDate = new Date(msg.read_at);
+  // if (isNaN(readAtDate.getTime())) {
+  //   console.warn('Invalid date:', msg.read_at);
+  //   return null;
+  // }
+
+  // const seenAt = formatInTimeZone(
+  //   msg.read_at,
+  //   userTimeZone,
+  //   'yyyy-MM-dd HH:mm'
+  // );
   return (
     <MessageRow $isSender={isSender}>
       {!isSender && (
@@ -124,6 +148,9 @@ function MessageItem({
           <MessageFile>
             <img src={msg.file_url} alt={msg.file_name} />
           </MessageFile>
+        )}
+        {isSender && msg.read_at && (
+          <Seen>Seen at {new Date().toLocaleTimeString()}</Seen>
         )}
       </MessageBubble>
     </MessageRow>

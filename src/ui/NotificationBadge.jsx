@@ -8,8 +8,8 @@ const BadgeWrapper = styled.div`
 
 const Badge = styled.span`
   position: absolute;
-  top: ${(props) => props.$top || '-30px'};
-  right: ${(props) => props.$right || '-8px'};
+  top: ${(props) => props.$top || ''};
+  right: ${(props) => props.$right || ''};
   transform: translate(50%, -50%);
   width: ${(props) => props.$size || '15px'};
   height: ${(props) => props.$size || '15px'};
@@ -23,14 +23,14 @@ const Badge = styled.span`
   align-items: center;
   justify-content: center;
   animation: ${(props) =>
-    props.pulse ? 'pulse 1s ease-in-out infinite' : 'none'};
+    props.$pulse ? 'pulse 1s ease-in-out infinite' : 'none'};
 
   @keyframes pulse {
     0% {
       transform: scale(1);
     }
     50% {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
     100% {
       transform: scale(1);

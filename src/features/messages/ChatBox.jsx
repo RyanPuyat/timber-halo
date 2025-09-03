@@ -3,6 +3,8 @@ import { useEffect, useRef } from 'react';
 import { useDarkMode } from '../../context/DarkModeContext';
 import styled from 'styled-components';
 import MessageItem from './MessageItem';
+import { updateStatusAsRead } from '../../services/apiMessage';
+import { useUnreadMessages } from '../../context/UnreadMessageContext';
 
 const MessagesWrapper = styled.div`
   flex: 1;
@@ -17,6 +19,25 @@ function ChatBox({ currentUser, receiver, messages = [] }) {
     currentUser.id,
     receiver.id
   );
+  const { resetUnread } = useUnreadMessages();
+
+  useEffect(() => {
+    const unreadMessages = messages.filter(
+      (msg) => msg.receiver_id === currentUser.id && !msg.read_at
+    );
+
+    const unreadIds = unreadMessages.map((msg) => msg.id);
+    const senderIds = [...new Set(unreadMessages.map((msg) => msg.sender_id))];
+
+    if (unreadIds.length > 0) {
+      console.log('Marking as read:', unreadIds);
+      updateStatusAsRead(unreadIds);
+
+      senderIds.forEach((senderId) => {
+        resetUnread(senderId); // ✅ Reset per sender
+      });
+    }
+  }, [messages, currentUser.id, resetUnread]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

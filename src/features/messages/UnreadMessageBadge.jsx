@@ -8,13 +8,8 @@ import { useEffect } from 'react';
 function UnreadMessageBadge() {
   const { data: currentUser } = useCurrentUserProfile();
   const userId = currentUser?.id;
-  const {
-    unreadCounts,
-    incrementUnread,
-    //localhost:3000/dashboard
-    http: receiverId,
-    resetUnread,
-  } = useUnreadMessages();
+  const { unreadCounts, incrementUnread, receiverId, resetUnread } =
+    useUnreadMessages();
 
   useUnreadMessage(userId, (message) => {
     const senderId = message.sender_id;
@@ -44,13 +39,14 @@ function UnreadMessageBadge() {
 
   if (!filteredUnread || filteredUnread === 0) return null;
 
-  // const totalUnread = Object.values(unreadCounts).reduce((a, b) => a + b, 0);
-
-  // const isActiveUser = activeUserId !== userId;
-
-  // if (totalUnread === 0 || !isActiveUser) return null;
-
-  return <NotificationBadge count={filteredUnread} />;
+  return (
+    <NotificationBadge
+      count={filteredUnread}
+      $top={'-30px'}
+      $right={'-5px'}
+      $pulse={true}
+    />
+  );
 }
 
 export default UnreadMessageBadge;

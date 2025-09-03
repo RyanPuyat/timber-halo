@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import Button from '../../ui/Button';
 import useEmojiPicker from '../messages/useEmojiPicker';
 import EmojiPickerOverlay from '../../ui/EmojiPickerOverlay';
+import { HiClipboard, HiFaceSmile, HiPaperClip } from 'react-icons/hi2';
 
 const InputWrapper = styled.div`
   position: relative;
   flex: 1;
   margin-right: 8px;
+  align-items: row;
 `;
 
 const MessageForm = styled.form`
@@ -16,15 +18,6 @@ const MessageForm = styled.form`
 `;
 
 const EditableInput = styled.div`
-  /* flex: 1;
-  padding: 10px;
-  border: 1px solid var(--color-grey-300);
-  border-radius: 20px;
-  background-color: #f1f1f1;
-  margin-right: 8px;
-  min-height: 40px;
-  outline: none;
-  white-space: pre-wrap; */
   contenteditable: true;
   white-space: pre-wrap; // ✅ Allows wrapping at spaces and line breaks
   word-break: break-word; // ✅ Breaks long words if needed
@@ -44,28 +37,59 @@ const EditableInput = styled.div`
     color: var(--color-grey-400);
   }
 `;
-
-const EmojiButton = styled.button`
-  background: none;
+const BaseButton = styled.button`
+  background-color: transparent;
   border: none;
-  cursor: pointer;
+  outline: none;
+  padding: 6px;
+  margin: 0 8px;
   font-size: 20px;
-  margin-left: 8px;
-  margin-right: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-grey-100);
+  }
+
+  &:active {
+    background-color: var(--color-grey-200);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-grey-300);
+  }
 `;
 
-const UploadButton = styled.button`
-  background: none;
-  border: none;
+const EmojiButton = styled(BaseButton)``;
+const UploadButton = styled(BaseButton)`
+  height: 36px;
+`;
+const Icon = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 20px;
-  cursor: pointer;
-  margin-right: 8px;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
 `;
 
 function ChatForm({ receiver, onSendMessage }) {
   const [file, setFile] = useState(null);
   const editableRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (receiver && editableRef.current) {
+      editableRef.current.focus();
+    }
+  }, [receiver]);
 
   const [renderPicker, setRenderPicker] = useState(false);
 
@@ -136,9 +160,9 @@ function ChatForm({ receiver, onSendMessage }) {
         {showEmojiPicker && (
           <EmojiPickerOverlay
             onEmojiClick={insertEmoji}
-            lazyLoadEmojis
-            skinTonesDisabled
-            searchDisabled
+            lazyLoadEmojis={true}
+            skinTonesDisabled={true}
+            searchDisabled={true}
             height={300}
             width={320}
             emojiStyle="native"
@@ -152,11 +176,15 @@ function ChatForm({ receiver, onSendMessage }) {
         onClick={() => fileInputRef.current && fileInputRef.current.click()}
         title="Upload image"
       >
-        📷
+        <Icon style={{ transform: 'translateY(2px)' }}>
+          <HiPaperClip />
+        </Icon>
       </UploadButton>
 
       <EmojiButton type="button" onClick={togglePicker} title="Insert emoji">
-        😊
+        <Icon>
+          <HiFaceSmile />
+        </Icon>
       </EmojiButton>
 
       <input

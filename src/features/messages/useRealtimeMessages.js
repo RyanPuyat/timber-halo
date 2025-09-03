@@ -13,14 +13,14 @@ export function useLiveMessages(senderId, receiverId) {
       return;
     }
 
-    console.log('--- Subscribing to Realtime Channel ---');
+    // console.log('--- Subscribing to Realtime Channel ---');
 
     const conversationId =
       senderId < receiverId
         ? `${senderId}-${receiverId}`
         : `${receiverId}-${senderId}`;
 
-    console.log('Channel:', `chat-channel-${conversationId}`);
+    // console.log('Channel:', `chat-channel-${conversationId}`);
 
     const channel = supabase
       .channel(`chat-channel-${conversationId}`)
@@ -32,7 +32,7 @@ export function useLiveMessages(senderId, receiverId) {
           table: 'messages',
         },
         (payload) => {
-          console.log(`${payload.eventType} event received:`, payload);
+          // console.log(`${payload.eventType} event received:`, payload);
           const { eventType, new: newRow, old: oldRow } = payload;
 
           // Check if the message is relevant to the current conversation
@@ -66,7 +66,7 @@ export function useLiveMessages(senderId, receiverId) {
               );
               return isDuplicate ? oldMessages : [...oldMessages, newRow];
             }
-            console.log('Event type received:', eventType);
+            // console.log('Event type received:', eventType);
             if (eventType === 'DELETE') {
               // console.log(
               //   '❌ DELETE event detected. Deleted message ID:',
@@ -76,6 +76,12 @@ export function useLiveMessages(senderId, receiverId) {
               return oldMessages.filter((msg) => msg.id !== oldRow.id);
             }
             // Add more conditions for UPDATE if needed
+            if (eventType === 'UPDATE') {
+              console.log('Realtime update:', newRow);
+              return oldMessages.map((msg) =>
+                msg.id === newRow.id ? { ...msg, ...newRow } : msg
+              );
+            }
             return oldMessages;
           });
         }
