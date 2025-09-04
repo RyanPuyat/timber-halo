@@ -28,7 +28,7 @@ function UnreadMessageBadge() {
   });
 
   useEffect(() => {
-    console.log('Unread counts:', unreadCounts);
+    // console.log('Unread counts:', unreadCounts);
   }, [unreadCounts]);
 
   const filteredUnread = Object.entries(unreadCounts)

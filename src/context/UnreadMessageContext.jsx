@@ -23,7 +23,7 @@ function UnreadMessageProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    console.log('Active user ID:', activeUserId);
+    // console.log('Active user ID:', activeUserId);
   }, [activeUserId]);
 
   useEffect(() => {
