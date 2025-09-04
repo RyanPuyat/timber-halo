@@ -10,7 +10,7 @@ window.addEventListener('touchstart', unlockSound, { once: true });
 
 const messageAudio = new Audio('/sounds/message.wav');
 messageAudio.preload = 'auto';
-messageAudio.volume = 0.8; // optional: adjust volume
+messageAudio.volume = 0.8;
 
 export function playMessageSound() {
   if (!soundUnlocked) {
@@ -25,12 +25,9 @@ export function playMessageSound() {
 
     if (playPromise !== undefined) {
       playPromise
-        .then(() => {
-          // Playback started successfully
-        })
+        .then(() => {})
         .catch((err) => {
           if (err.name === 'AbortError') {
-            // Silently ignore or log if needed
             console.debug('Audio playback was aborted.');
           } else {
             console.warn('Audio playback failed:', err);

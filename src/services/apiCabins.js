@@ -11,20 +11,6 @@ export async function getCabins() {
   return data;
 }
 
-// export async function createCabin(newCabin) {
-//   const { data, error } = await supabase
-//     .from('cabins')
-//     .insert([newCabin])
-//     .select();
-
-//   if (error) {
-//     console.error(error);
-//     throw new Error('Cabin creation failed');
-//   }
-
-//   return data;
-// }
-
 export async function createEditCabin(newCabin, id) {
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 

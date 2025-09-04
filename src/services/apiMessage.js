@@ -18,21 +18,6 @@ export async function getMessages(senderId, receiverId) {
       (msg.sender_id === receiverId && msg.receiver_id === senderId)
   );
 
-  // const unreadMessages = filtered.filter(
-  //   (msg) =>
-  //     msg.receiver_id === senderId && // senderId is the current user viewing
-  //     !msg.read_at
-  // );
-
-  // if (unreadMessages.length > 0) {
-  //   const idsToUpdate = unreadMessages.map((msg) => msg.id);
-
-  //   await supabase
-  //     .from('messages')
-  //     .update({ read_at: new Date().toISOString() })
-  //     .in('id', idsToUpdate);
-  // }
-
   const enriched = await Promise.all(
     filtered.map(async (msg) => {
       if (msg.file_url) {
@@ -96,7 +81,6 @@ export async function sendMessage(senderId, receiverId, content, file) {
       read: false,
       file_url: fileUrl,
       file_name: file?.name || null,
-      // created_at: new Date().toISOString(),
     },
   ]);
 
@@ -120,22 +104,19 @@ export async function getUnreadMessageCount(userId) {
   try {
     const { data: messages, error } = await supabase
       .from('messages')
-      // .select('*', { count: 'exact', head: true })
       .select('sender_id')
 
       .eq('receiver_id', userId)
       .eq('read', false);
 
     if (error) throw error;
-    // return data;
 
     const counts = {};
     messages.forEach(({ sender_id }) => {
       counts[sender_id] = (counts[sender_id] || 0) + 1;
     });
 
-    return counts; // e.g. { user2: 1, user3: 1 }
-    // return count;
+    return counts;
   } catch (err) {
     console.error('Unread message fetch failed:', err);
     throw err;
@@ -159,8 +140,6 @@ export async function markMessagesAsRead(senderId, receiverId) {
 }
 
 export async function deleteMessage(id, filePath) {
-  // console.log('deleteMessageApi received:', { id, filePath });
-
   if (!id) {
     throw new Error('Missing id or senderId');
   }
@@ -170,8 +149,6 @@ export async function deleteMessage(id, filePath) {
     .delete()
     .eq('id', id)
     .select();
-
-  // console.log('Delete response:', { MessageData, deleteError });
 
   if (deleteError) {
     throw new Error('Message could not be deleted');

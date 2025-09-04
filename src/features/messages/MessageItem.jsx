@@ -3,8 +3,6 @@ import Menus from '../../ui/Menus';
 import { HiDownload, HiTrash } from 'react-icons/hi';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import Modal from '../../ui/Modal';
-import { formatInTimeZone } from 'date-fns-tz';
-import { userTimeZone } from '../../utils/helpers';
 
 const Avatar = styled.img`
   display: block;
@@ -39,8 +37,8 @@ const MessageBubble = styled.div`
   background-color: ${({ $isSender, $isDarkMode }) =>
     $isDarkMode
       ? $isSender
-        ? 'var(--color-yellow-700)' // sender in dark mode
-        : 'var(--color-green-700)' // receiver in dark mode
+        ? 'var(--color-yellow-700)'
+        : 'var(--color-green-700)'
       : ''};
   color: var(--color-grey-100);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -53,11 +51,11 @@ const SenderName = styled.div`
 `;
 
 const MessageText = styled.div`
-  white-space: pre-wrap; // ✅ Allows wrapping at spaces and line breaks
-  word-break: break-word; // ✅ Breaks long words if needed
-  overflow-wrap: break-word; // ✅ Ensures wrapping even in tricky cases
-  overflow-x: hidden; // ✅ Prevents horizontal scroll
-  max-width: 100%; // ✅ Keeps it within container
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  max-width: 100%;
   font-size: 14px;
 `;
 
@@ -82,17 +80,6 @@ function MessageItem({
   isDeleting,
   deleteMessage,
 }) {
-  // const readAtDate = new Date(msg.read_at);
-  // if (isNaN(readAtDate.getTime())) {
-  //   console.warn('Invalid date:', msg.read_at);
-  //   return null;
-  // }
-
-  // const seenAt = formatInTimeZone(
-  //   msg.read_at,
-  //   userTimeZone,
-  //   'yyyy-MM-dd HH:mm'
-  // );
   return (
     <MessageRow $isSender={isSender}>
       {!isSender && (

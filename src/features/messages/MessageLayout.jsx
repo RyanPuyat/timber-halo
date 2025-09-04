@@ -6,7 +6,7 @@ import ChatForm from './ChatForm';
 import { markMessagesAsRead } from '../../services/apiMessage';
 import { useChatSession } from './useChatSession';
 import { useUnreadMessages } from '../../context/UnreadMessageContext';
-// import { NotificationBadge } from '../../ui/NotificationBadge';
+
 import { useEffect } from 'react';
 
 const StyledMessageLayout = styled.div`
@@ -14,7 +14,7 @@ const StyledMessageLayout = styled.div`
   grid-template-areas:
     'header sidebar'
     'main sidebar'
-    'footer sidebar'; /* New area for the chat form */
+    'footer sidebar';
   grid-template-columns: 1fr 26rem;
   grid-template-rows: auto 1fr auto;
   height: 100%;
@@ -52,8 +52,6 @@ function MessageLayout() {
     currentUser,
     receiver,
     setReceiver,
-    // combinedMessages,
-
     messages,
     handleSendMessage,
     file,
@@ -68,8 +66,8 @@ function MessageLayout() {
     setReceiver(user);
 
     try {
-      await markMessagesAsRead(user.id, currentUser.id); // backend update
-      resetUnread(user.id); // local context update
+      await markMessagesAsRead(user.id, currentUser.id);
+      resetUnread(user.id);
     } catch (err) {
       console.error('Failed to mark messages as read:', err);
     }
@@ -77,7 +75,7 @@ function MessageLayout() {
 
   useEffect(() => {
     return () => {
-      setReceiverId(null); // Reset when leaving the page
+      setReceiverId(null);
     };
   }, []);
 
@@ -103,7 +101,6 @@ function MessageLayout() {
             currentUser={currentUser}
             receiver={receiver}
             messages={messages}
-            // messages={combinedMessages}
           />
         ) : (
           <p style={{ padding: '2rem' }}>Select a user to start chatting.</p>

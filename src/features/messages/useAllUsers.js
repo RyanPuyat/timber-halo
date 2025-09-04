@@ -19,7 +19,6 @@ export function useAllUsers() {
 }
 
 export function useCurrentUserProfile() {
-  // Step 1: Fetch the authenticated user
   const {
     data: authUser,
     isLoading: AuthLoading,
@@ -29,9 +28,7 @@ export function useCurrentUserProfile() {
     queryFn: getAuthUser,
   });
 
-  // Step 2: Fetch the full profile using the auth user's ID
   const userId = authUser?.id;
-  // const userId = typeof authUser?.id === 'string' ? authUser.id : null;
 
   const {
     data,
@@ -40,10 +37,9 @@ export function useCurrentUserProfile() {
   } = useQuery({
     queryKey: ['userProfile', userId],
     queryFn: getUserProfile,
-    enabled: !!userId, // only run when userId is available
+    enabled: !!userId,
   });
 
-  // Combine loading and error states
   const isLoading = AuthLoading || ProfileLoading;
   const error = authError || profileError;
 

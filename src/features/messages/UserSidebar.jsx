@@ -40,7 +40,7 @@ const NoUser = styled.p`
 function UserSidebar({ onSelect, receiverId }) {
   const [searchQuery, setSearchQuery] = useState('');
   const { profiles } = useAllUsers();
-  const { data: currentUser, isPending } = useCurrentUserProfile(); // Authenticated user
+  const { data: currentUser, isPending } = useCurrentUserProfile();
   const { unreadCounts } = useUnreadMessages();
 
   if (isPending || !currentUser) return <Spinner />;

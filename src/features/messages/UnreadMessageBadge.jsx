@@ -19,11 +19,9 @@ function UnreadMessageBadge() {
     }
 
     if (senderId === receiverId) {
-      // You're already viewing this chat — mark it as read
       resetUnread(senderId);
       playMessageSound();
     } else {
-      // You're not viewing this chat — increment unread
       incrementUnread(senderId);
       playMessageSound();
     }

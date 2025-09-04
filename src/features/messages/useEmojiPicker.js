@@ -23,37 +23,31 @@ export default function useEmojiPicker(editableRef) {
   }
 
   function insertEmoji(emoji) {
-    // Delay to let focus settle
     setTimeout(() => {
       const editable = editableRef.current;
       const savedRange = savedRangeRef.current;
 
       if (!editable || !savedRange) return;
 
-      // Step 1: Focus the input
       editable.focus();
 
-      // Step 2: Restore the saved range
       const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(savedRange);
 
-      // Step 3: Insert the emoji
       const range = selection.getRangeAt(0);
       const emojiNode = document.createTextNode(emoji.emoji);
 
       range.deleteContents();
       range.insertNode(emojiNode);
 
-      // Step 4: Move cursor after emoji
       range.setStartAfter(emojiNode);
       range.collapse(true);
       selection.removeAllRanges();
       selection.addRange(range);
 
-      // Step 5: Save new range
       savedRangeRef.current = range.cloneRange();
-    }, 0); // This delay is crucial
+    }, 0);
   }
 
   function saveCursor() {

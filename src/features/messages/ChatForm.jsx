@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Button from '../../ui/Button';
 import useEmojiPicker from '../messages/useEmojiPicker';
 import EmojiPickerOverlay from '../../ui/EmojiPickerOverlay';
-import { HiClipboard, HiFaceSmile, HiPaperClip } from 'react-icons/hi2';
+import { HiFaceSmile, HiPaperClip } from 'react-icons/hi2';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -19,11 +19,11 @@ const MessageForm = styled.form`
 
 const EditableInput = styled.div`
   contenteditable: true;
-  white-space: pre-wrap; // ✅ Allows wrapping at spaces and line breaks
-  word-break: break-word; // ✅ Breaks long words if needed
-  overflow-wrap: break-word; // ✅ Ensures wrapping even in tricky cases
-  overflow-x: hidden; // ✅ Prevents horizontal scroll
-  max-width: 100%; // ✅ Keeps it within container
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  max-width: 100%;
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -152,8 +152,8 @@ function ChatForm({ receiver, onSendMessage }) {
           onFocus={saveCursor}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault(); // Prevent newline
-              document.querySelector('form').requestSubmit(); // Trigger form submit
+              e.preventDefault();
+              document.querySelector('form').requestSubmit();
             }
           }}
         />
