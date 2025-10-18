@@ -4,17 +4,6 @@
 
 So I’ve started building a custom internal app for the hotel. It’s designed specifically for the staff to handle everything smoothly and efficiently. This isn’t just another side project—it’s becoming the digital heartbeat of Timber Halo.
 
----
-
-## 🧭 Why Build Our Own App?
-
-Most hotel management platforms are built for scale: dozens or hundreds of rooms, multiple departments, and generic workflows. Timber Halo needed something different—something lean, elegant, and tailored to the way how the business works.
-
-This internal app will be used exclusively by hotel staff to manage bookings, cabins, guests, and daily operations. It’s designed to be intuitive, secure, and deeply integrated with the hotel’s day-to-day flow.
-
----
-
-
 
 ### 🔐 Authentication & User Management
 - Only hotel employees can sign up (no public registration)
